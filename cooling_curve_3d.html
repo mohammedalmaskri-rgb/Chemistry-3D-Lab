@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>مختبر منحنى التبريد ثلاثي الأبعاد</title>
+<style>
+:root{--ink:#1d2731;--muted:#667481;--line:#d9e0e5;--accent:#197c7a;--danger:#a93c43;--wall:#e9eef1;--bench:#3e454b;--steel:#aeb8be}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#eef2f4;color:var(--ink);min-height:100vh}header{height:68px;padding:0 22px;background:#fff;border-bottom:1px solid #ccd5da;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px #00000012}header h1{font-size:19px;margin:0}.tag{font-size:12px;color:#46555f;background:#eef3f5;border:1px solid #d8e0e4;padding:7px 11px;border-radius:999px}.layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;padding:18px;max-width:1500px;margin:auto}.panel{background:#fff;border:1px solid #d5dde1;border-radius:16px;padding:16px;box-shadow:0 12px 28px #00000012;align-self:start}.panel h2{font-size:16px;margin:0 0 12px}.section{background:#f6f8f9;border:1px solid #e0e6e9;border-radius:12px;padding:12px;margin:10px 0}.materials{display:grid;grid-template-columns:1fr 1fr;gap:8px}.chip{background:white;border:1px solid #d7dfe3;border-radius:9px;padding:9px;text-align:center;font-size:12px}.step{padding:10px;border-radius:10px;background:#f5f7f8;border:1px solid #e0e6e9;margin:7px 0;color:#46555f;font-size:12px}.step.active{background:#e9f4f3;border-color:#93c7c5;color:#213c3b}.controls{display:grid;gap:8px}.btn{border:1px solid #cdd6db;border-radius:10px;padding:11px;font-weight:700;cursor:pointer;color:#24313a;background:white}.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}.btn.alt{background:#f4f6f7}.btn.reset{background:#fff3f3;color:#8e3038;border-color:#e7b7ba}.btn:disabled{opacity:.45}.ready{margin-top:10px;text-align:center;color:#52717e;font-size:12px}
+.scene{position:relative;min-height:720px;background:#eef1f2;border:1px solid #cfd8dc;border-radius:18px;overflow:hidden;box-shadow:0 16px 35px #00000016}.wall{position:absolute;inset:0 0 34% 0;background:linear-gradient(#f2f5f6,#e5ebee)}.tiles{position:absolute;inset:0 0 34% 0;background-image:linear-gradient(#d5dde1 1px,transparent 1px),linear-gradient(90deg,#d5dde1 1px,transparent 1px);background-size:84px 84px;opacity:.55}.window{position:absolute;left:5%;top:7%;width:27%;height:24%;background:linear-gradient(180deg,#d7ebf6,#bcd7e6);border:10px solid #f9fbfc;box-shadow:0 0 0 1px #bec9cf}.cabinet{position:absolute;right:5%;top:6%;width:29%;height:25%;background:linear-gradient(#f8fafb,#e8edef);border:1px solid #cad4d9}.cabinet:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:#cfd7db}.shelf{position:absolute;left:39%;right:36%;top:13%;height:12px;background:linear-gradient(#d9e1e5,#a9b5bc);box-shadow:0 6px 10px #0000001c}.bottle{position:absolute;top:15%;width:38px;height:70px;border:2px solid #c8d2d7;border-radius:5px 5px 12px 12px;background:linear-gradient(#ffffffbb,#eff6f8aa);box-shadow:inset 0 0 10px #fff,0 3px 8px #00000016}.bottle:before{content:"";position:absolute;top:-13px;left:9px;width:16px;height:14px;background:#5b646a;border-radius:3px}.bottle:after{content:"";position:absolute;left:5px;right:5px;bottom:12px;height:28px;border-radius:4px;background:#8dc5d388}.b1{left:43%}.b2{left:49%}.b2:after{background:#d1b65d88}.bench{position:absolute;left:0;right:0;bottom:22%;height:16%;background:linear-gradient(#586067,#3c4348);border-top:10px solid #252b2f}.cupboard{position:absolute;bottom:0;height:22%;width:26%;background:linear-gradient(#f5f7f8,#dfe6e9);border:1px solid #c8d2d6}.cupboard.left{left:3%}.cupboard.right{right:3%}.cupboard:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:#c9d2d6}
+.apparatus{position:absolute;left:4%;right:4%;top:205px;height:400px}.tripod{position:absolute;left:8%;bottom:60px;width:270px;height:180px}.tripod .top{position:absolute;left:0;right:0;top:0;height:14px;background:linear-gradient(#dce4e8,#8b989f);border-radius:8px}.leg{position:absolute;top:12px;width:10px;height:150px;background:linear-gradient(#e6ecef,#7f8d95);transform-origin:top}.leg.l1{left:24px;transform:rotate(8deg)}.leg.l2{left:128px}.leg.l3{right:24px;transform:rotate(-8deg)}.beaker{position:absolute;left:77px;top:-133px;width:118px;height:138px;border:4px solid #bfd4dc;border-top-width:5px;border-radius:7px 7px 20px 20px;background:linear-gradient(180deg,#ffffff65,#d7f2f8aa 34%,#9ed5e2bb);box-shadow:inset 0 0 20px #fff,0 10px 18px #0002}.water{position:absolute;left:9px;right:9px;bottom:9px;height:86px;border-radius:0 0 14px 14px;background:linear-gradient(#b8e3ecaa,#75c2d1cc)}.steam{position:absolute;left:28px;right:28px;top:-60px;height:60px;opacity:0;transition:.5s}.steam i{position:absolute;bottom:0;width:8px;height:32px;border-radius:50%;background:linear-gradient(#ffffff00,#ffffffaa);filter:blur(2px);animation:steam 2.3s infinite}.steam i:nth-child(1){left:10px}.steam i:nth-child(2){left:43px;animation-delay:.5s}.steam i:nth-child(3){right:10px;animation-delay:1s}@keyframes steam{0%{transform:translateY(20px) scale(.7);opacity:0}40%{opacity:.55}100%{transform:translateY(-20px) scale(1.2);opacity:0}}
+.rack{position:absolute;left:41%;bottom:74px;width:265px;height:120px}.rackTop{position:absolute;left:0;right:0;top:24px;height:18px;background:linear-gradient(#d5dde1,#929fa6);border-radius:7px}.rackBase{position:absolute;left:10px;right:10px;bottom:0;height:18px;background:linear-gradient(#c7d0d5,#7f8b92);border-radius:9px}.tube{position:absolute;bottom:19px;width:55px;height:180px;border:4px solid #bfd4dc;border-radius:10px 10px 22px 22px;background:linear-gradient(180deg,#ffffff75,#eef8fa44);box-shadow:inset 0 0 12px #fff,0 8px 16px #0002;transition:.6s}.tube.a{left:54px}.tube.b{right:54px}.sample{position:absolute;left:7px;right:7px;bottom:8px;height:62px;border-radius:0 0 13px 13px;transition:.6s}.tube.a .sample{background:linear-gradient(#e7d488,#b99b39)}.tube.b .sample{background:linear-gradient(#cdb3d8,#967bb0)}.sample.melted{height:48px;filter:saturate(.8);opacity:.9}.thermo{position:absolute;top:-89px;left:20px;width:9px;height:116px;border-radius:7px;background:linear-gradient(#f4f7f8,#cad4d9);border:2px solid #9eabb2}.thermo:after{content:"";position:absolute;bottom:-8px;left:-5px;width:15px;height:15px;border-radius:50%;background:#b7373f}.tagA,.tagB{position:absolute;bottom:-29px;font-size:12px;background:#fff;border:1px solid #d1d9dd;border-radius:7px;padding:5px 8px}.tagA{left:51px}.tagB{right:51px}
+.screen{position:absolute;right:2%;top:10px;width:335px;height:255px;background:#f8fafb;border:8px solid #4b555b;border-radius:14px;box-shadow:0 12px 26px #0003;padding:9px}.screen-title{font-size:12px;color:#53616b;margin-bottom:5px}.chart{width:100%;height:202px;background:white;border:1px solid #cfd8dc;border-radius:6px}.status{position:absolute;left:20px;bottom:24px;background:#ffffffeb;border:1px solid #d5dde1;border-radius:12px;padding:11px 13px;font-size:12px;color:#4c5a64;box-shadow:0 5px 14px #0001}.digital{position:absolute;right:20px;bottom:24px;background:#24313a;color:#bfe7d7;font-family:monospace;font-size:14px;padding:10px 12px;border-radius:8px;border:2px solid #11191e;box-shadow:inset 0 0 8px #0008}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.scene{min-height:680px}.screen{width:300px}.apparatus{transform:scale(.92);transform-origin:center top}}
+
+/* ===== Mobile-first responsive layer ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:contain}
+button,select,input{font:inherit}
+.btn{min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.panel,.scene{contain:layout paint style}
+
+/* Phone */
+@media (max-width:767px){
+  header{height:auto;min-height:58px;padding:10px 12px;gap:8px;align-items:flex-start;position:relative}
+  header h1{font-size:15px;line-height:1.45;max-width:72%}
+  header .tag,.tag{font-size:10px;padding:6px 8px;white-space:nowrap}
+  .layout,.app{display:flex!important;flex-direction:column!important;gap:10px!important;padding:10px!important;width:100%;max-width:none}
+  .panel{width:100%;padding:12px;border-radius:13px;box-shadow:0 5px 15px #0000000d}
+  .panel h2{font-size:15px}
+  .section{padding:10px;margin:8px 0}
+  .materials{grid-template-columns:1fr 1fr}
+  .chip{font-size:11px;padding:8px 5px}
+  .step{font-size:11.5px;padding:9px;margin:6px 0}
+  .step b{font-size:12.5px}
+  .step span{font-size:11px}
+  .controls{grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .btn{min-height:50px;padding:10px 8px;font-size:12px;border-radius:11px}
+  .controls .primary,.controls .reset,.controls .danger{grid-column:auto}
+  .ready,.legend,.warn,.result{font-size:11.5px;line-height:1.6}
+  .scene,.sceneWrap{width:100%;min-height:0!important;height:560px!important;border-radius:14px}
+  .window{left:4%;top:5%;width:30%;height:20%;border-width:6px}
+  .cabinet{right:4%;top:5%;width:30%;height:21%}
+  .shelf{top:12%;left:38%;right:36%}
+  .bottle{transform:scale(.76);transform-origin:top center}
+  .cupboard{height:18%;width:30%}
+  .status,.hud{left:10px;bottom:10px;max-width:62%;font-size:10.5px;padding:8px 9px}
+  .digital,.safety{right:10px;bottom:10px;font-size:10.5px;padding:8px 9px}
+}
+
+/* Small phones */
+@media (max-width:420px){
+  .controls{grid-template-columns:1fr}
+  .btn{min-height:52px;font-size:12.5px}
+  .scene,.sceneWrap{height:530px!important}
+}
+
+/* iPad / tablets - expands automatically */
+@media (min-width:768px) and (max-width:1180px){
+  header{padding:0 18px}
+  .layout,.app{grid-template-columns:300px minmax(0,1fr)!important;gap:14px!important;padding:14px!important;max-width:1180px}
+  .panel{padding:14px}
+  .btn{min-height:48px}
+  .scene,.sceneWrap{min-height:680px;height:680px}
+}
+
+/* Tablet portrait */
+@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
+  .layout,.app{grid-template-columns:1fr!important}
+  .panel{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+  .panel>h2,.panel>.result,.panel>.legend,.panel>.warn,.panel>.ready{grid-column:1/-1}
+  .controls{grid-template-columns:repeat(3,1fr)}
+  .scene,.sceneWrap{height:720px;min-height:720px}
+}
+
+/* Large desktop */
+@media (min-width:1181px){
+  .layout,.app{max-width:1500px}
+}
+
+/* Phone landscape */
+@media (max-width:900px) and (orientation:landscape){
+  header{min-height:50px;padding:8px 12px}
+  .layout,.app{display:grid!important;grid-template-columns:280px minmax(0,1fr)!important;align-items:start}
+  .scene,.sceneWrap{height:510px!important}
+  .controls{grid-template-columns:1fr 1fr}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+
+@media (max-width:767px){
+  .scene{overflow:hidden}
+  .apparatus{left:0;right:0;top:145px;height:330px;transform:none!important}
+  .tripod{left:-16px;bottom:52px;transform:scale(.70);transform-origin:left bottom}
+  .rack{left:33%;bottom:62px;transform:scale(.70);transform-origin:left bottom}
+  .screen{right:4px;top:8px;width:205px;height:164px;border-width:5px;padding:5px}
+  .screen-title{font-size:9px;margin-bottom:2px}
+  .chart{width:100%;height:130px}
+  .tagA,.tagB{font-size:10px;padding:4px 6px}
+}
+@media (max-width:420px){
+  .apparatus{top:138px}
+  .tripod{left:-24px;transform:scale(.64)}
+  .rack{left:31%;transform:scale(.64)}
+  .screen{width:190px;height:154px}
+  .chart{height:121px}
+}
+@media (min-width:768px) and (max-width:1180px){
+  .apparatus{top:190px}
+  .tripod{transform:scale(.86);transform-origin:left bottom}
+  .rack{transform:scale(.86);transform-origin:left bottom}
+  .screen{width:285px;height:228px}
+  .chart{height:178px}
+}
+@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
+  .apparatus{top:205px}
+  .screen{width:315px;height:245px}
+  .chart{height:192px}
+}
+
+</style>
+</head>
+<body>
+<header><h1>المختبر الإلكتروني — منحنيات التبريد</h1><div class="tag">محاكاة تعليمية آمنة</div></header>
+<div class="layout">
+<aside class="panel">
+<h2>مواد وأدوات التجربة</h2>
+<div class="section materials"><div class="chip">المادة A</div><div class="chip">المادة B</div><div class="chip">حمام مائي ≈ 90°C</div><div class="chip">ميزانا حرارة</div></div>
+<div class="section"><h2>خطوات التجربة</h2>
+<div class="step active" id="s1">1) سخّن الحمام المائي إلى نحو 90°C.</div>
+<div class="step" id="s2">2) ضع العينتين A وB في الحمام المائي حتى تنصهرا.</div>
+<div class="step" id="s3">3) أخرج الأنبوبتين وثبّت ميزاني الحرارة.</div>
+<div class="step" id="s4">4) سجّل الحرارة كل دقيقة حتى 35°C وارسم المنحنيين.</div></div>
+<div class="controls"><button class="btn" id="heat">تسخين الحمام المائي</button><button class="btn" id="melt" disabled>إذابة العينتين</button><button class="btn" id="remove" disabled>إخراج الأنبوبتين</button><button class="btn primary" id="start" disabled>بدء التسجيل</button><button class="btn alt" id="pause" disabled>إيقاف/متابعة</button><button class="btn reset" id="reset">إعادة التجربة</button></div>
+<div class="ready" id="ready">ابدأ بتسخين الحمام المائي</div>
+</aside>
+<div class="scene">
+<div class="wall"></div><div class="tiles"></div><div class="window"></div><div class="cabinet"></div><div class="shelf"></div><div class="bottle b1"></div><div class="bottle b2"></div><div class="bench"></div><div class="cupboard left"></div><div class="cupboard right"></div>
+<div class="apparatus">
+  <div class="tripod"><div class="top"></div><div class="leg l1"></div><div class="leg l2"></div><div class="leg l3"></div><div class="beaker"><div class="steam" id="steam"><i></i><i></i><i></i></div><div class="water"></div></div></div>
+  <div class="rack"><div class="rackTop"></div><div class="rackBase"></div><div class="tube a" id="tubeA"><div class="thermo"></div><div class="sample" id="sampleA"></div></div><div class="tube b" id="tubeB"><div class="thermo"></div><div class="sample" id="sampleB"></div></div><div class="tagA">المادة A</div><div class="tagB">المادة B</div></div>
+  <div class="screen"><div class="screen-title">درجة الحرارة مقابل الزمن</div><canvas id="chart" class="chart" width="315" height="202"></canvas></div>
+</div>
+<div class="status" id="status">سخّن الحمام المائي ثم ضع العينتين داخله.</div><div class="digital" id="digital">90.0 °C</div>
+</div>
+</div>
+<script>
+const heat=document.getElementById('heat'),melt=document.getElementById('melt'),removeBtn=document.getElementById('remove'),start=document.getElementById('start'),pause=document.getElementById('pause'),reset=document.getElementById('reset'),status=document.getElementById('status'),ready=document.getElementById('ready'),steam=document.getElementById('steam'),sampleA=document.getElementById('sampleA'),sampleB=document.getElementById('sampleB'),digital=document.getElementById('digital');
+const cv=document.getElementById('chart'),ctx=cv.getContext('2d');let phase=0,t=0,running=false,paused=false,raf=null,last=0,ptsA=[],ptsB=[];
+function step(n){for(let i=1;i<=4;i++)document.getElementById('s'+i).classList.toggle('active',i===n)}
+function draw(){ctx.clearRect(0,0,cv.width,cv.height);ctx.strokeStyle='#e3e8eb';ctx.lineWidth=1;for(let x=35;x<cv.width;x+=45){ctx.beginPath();ctx.moveTo(x,15);ctx.lineTo(x,180);ctx.stroke()}for(let y=20;y<180;y+=32){ctx.beginPath();ctx.moveTo(30,y);ctx.lineTo(305,y);ctx.stroke()}ctx.strokeStyle='#5c6870';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(30,15);ctx.lineTo(30,180);ctx.lineTo(305,180);ctx.stroke();ctx.fillStyle='#53616b';ctx.font='11px Tahoma';ctx.fillText('°C',8,18);ctx.fillText('الزمن',260,197);plot(ptsA,'#b79a39');plot(ptsB,'#8f77a8')}
+function plot(pts,color){if(pts.length<2)return;ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();pts.forEach((p,i)=>{let x=30+p.t*22;let y=180-(p.temp-30)*3;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke()}
+function tempA(x){if(x<3)return 90-x*10;if(x<7)return 60;return 60-(x-7)*7}
+function tempB(x){if(x<3)return 90-x*11;if(x<6)return 57-(x-3)*2;return 51-(x-6)*6}
+function loop(ts){if(!running)return;if(paused){raf=requestAnimationFrame(loop);return}if(!last)last=ts;if(ts-last>650){last=ts;t++;const a=Math.max(35,tempA(t)),b=Math.max(35,tempB(t));ptsA.push({t,temp:a});ptsB.push({t,temp:b});digital.textContent=`A ${Math.round(a)}°C  |  B ${Math.round(b)}°C`;draw();status.textContent=`الدقيقة ${t}: A = ${Math.round(a)}°C ، B = ${Math.round(b)}°C`;if(a<=35&&b<=35){running=false;pause.disabled=true;ready.textContent='اكتملت التجربة';status.textContent='اكتمل الرسم. المادة A تُظهر جزءًا أفقيًا أوضح، وهذا يدل على نقاوة أعلى.';return}}raf=requestAnimationFrame(loop)}
+heat.onclick=()=>{if(phase!==0)return;phase=1;steam.style.opacity=1;digital.textContent='90.0 °C';heat.disabled=true;melt.disabled=false;step(2);status.textContent='وصل الحمام المائي إلى نحو 90°C.';ready.textContent='الحمام المائي جاهز'};
+melt.onclick=()=>{if(phase!==1)return;phase=2;sampleA.classList.add('melted');sampleB.classList.add('melted');melt.disabled=true;removeBtn.disabled=false;step(3);status.textContent='انصهرت العينتان A وB. أخرج الأنبوبتين.';ready.textContent='العينتان منصهرتان'};
+removeBtn.onclick=()=>{if(phase!==2)return;phase=3;steam.style.opacity=.25;removeBtn.disabled=true;start.disabled=false;step(4);status.textContent='ثُبّت ميزانا الحرارة. ابدأ تسجيل القراءات.';ready.textContent='جاهز لبدء التسجيل'};
+start.onclick=()=>{if(phase!==3)return;phase=4;t=0;ptsA=[];ptsB=[];running=true;paused=false;last=0;start.disabled=true;pause.disabled=false;draw();status.textContent='بدأ تسجيل درجات الحرارة كل دقيقة.';raf=requestAnimationFrame(loop)};
+pause.onclick=()=>{paused=!paused;status.textContent=paused?'تم إيقاف التسجيل مؤقتًا.':'تم استئناف التسجيل.'};
+reset.onclick=()=>{cancelAnimationFrame(raf);phase=0;t=0;running=false;paused=false;ptsA=[];ptsB=[];last=0;heat.disabled=false;melt.disabled=true;removeBtn.disabled=true;start.disabled=true;pause.disabled=true;steam.style.opacity=0;sampleA.classList.remove('melted');sampleB.classList.remove('melted');step(1);digital.textContent='90.0 °C';status.textContent='سخّن الحمام المائي ثم ضع العينتين داخله.';ready.textContent='ابدأ بتسخين الحمام المائي';draw()};draw();
+</script>
+</body>
+</html>
