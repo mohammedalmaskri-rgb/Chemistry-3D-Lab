@@ -27,9 +27,9 @@ header h1{font-size:20px;margin:0}.tag{font-size:12px;color:#cfe8f5;background:#
 .bench{position:absolute;left:4%;right:4%;bottom:0;height:42%;background:linear-gradient(180deg,#776152,#4d4037);box-shadow:0 -12px 30px #0006}
 .petri{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);width:min(78vw,640px);aspect-ratio:1.8/1;border-radius:50%;border:5px solid #c8edff99;background:radial-gradient(ellipse at 50% 45%,#bff2ff22 0 60%,#61cbe63b 61% 100%);box-shadow:inset 0 0 34px #bdefff44,0 22px 40px #0008;overflow:hidden}
 .petri:before{content:"";position:absolute;inset:7%;border-radius:50%;border:2px solid #dff7ff44;box-shadow:inset 0 0 25px #8de2ff28}
-.waterglow{position:absolute;inset:13%;border-radius:50%;background:radial-gradient(ellipse,#9fe9ff1c,#5bc6e628);filter:blur(.2px)}
-.crystal{position:absolute;top:50%;width:26px;height:26px;transform:translateY(-50%) rotate(45deg);border-radius:4px;box-shadow:0 0 18px currentColor;transition:.35s;z-index:5}.crystal.left{left:9%;background:#e8ecf1;color:#cfd7df}.crystal.right{right:9%;background:#f4e17c;color:#f4e17c}.crystal.dissolving{transform:translateY(-50%) rotate(45deg) scale(.25);opacity:.25}
-.crLabel{position:absolute;top:68%;font-size:12px;padding:6px 8px;background:#07131fdc;border:1px solid #ffffff20;border-radius:9px;z-index:6}.crLabel.left{left:3%}.crLabel.right{right:3%}
+.waterglow{position:absolute;inset:13%;border-radius:50%;background:radial-gradient(ellipse,#9fe9ff1c,#5bc6e628);filter:blur(.2px);opacity:0;transition:.35s}.waterglow.show{opacity:1}
+.crystal{position:absolute;top:50%;width:26px;height:26px;transform:translateY(-50%) rotate(45deg);border-radius:4px;box-shadow:0 0 18px currentColor;transition:.35s;z-index:5;opacity:0}.crystal.left{left:9%;background:#e8ecf1;color:#cfd7df}.crystal.right{right:9%;background:#f4e17c;color:#f4e17c}.crystal.dissolving{transform:translateY(-50%) rotate(45deg) scale(.25);opacity:.25}
+.crLabel{position:absolute;top:68%;font-size:12px;padding:6px 8px;background:#07131fdc;border:1px solid #ffffff20;border-radius:9px;z-index:6;opacity:0;transition:.25s}.crLabel.show{opacity:1}.crLabel.left{left:3%}.crLabel.right{right:3%}
 canvas{position:absolute;inset:0;width:100%;height:100%;z-index:4}
 .hud{position:absolute;left:16px;bottom:16px;right:16px;display:flex;gap:10px;flex-wrap:wrap;z-index:8;pointer-events:none}.chip{background:#06111cd9;border:1px solid #ffffff18;border-radius:12px;padding:9px 11px;font-size:12px;color:#d9e8f3;box-shadow:0 8px 18px #0005}.chip b{color:#fff}
 .panel{padding:16px}.current{border:1px solid #35c3b799;background:#35c3b710;border-radius:16px;padding:13px 14px;line-height:1.7;margin-bottom:12px}.current b{display:block;font-size:15px;margin-bottom:3px}.current span{font-size:13px;color:#c8d9e5}
@@ -52,11 +52,11 @@ canvas{position:absolute;inset:0;width:100%;height:100%;z-index:4}
       <div class="bottle b1"></div><div class="bottle b2"></div><div class="bottle b3"></div>
       <div class="bench"></div>
       <div class="petri" id="petri">
-        <div class="waterglow"></div>
+        <div class="waterglow" id="waterGlow"></div>
         <div class="crystal left" id="agCrystal"></div>
         <div class="crystal right" id="kiCrystal"></div>
-        <div class="crLabel left">بلورة نترات الفضة AgNO₃</div>
-        <div class="crLabel right">بلورة يوديد البوتاسيوم KI</div>
+        <div class="crLabel left" id="agLabel">بلورة نترات الفضة AgNO₃</div>
+        <div class="crLabel right" id="kiLabel">بلورة يوديد البوتاسيوم KI</div>
         <canvas id="fx"></canvas>
       </div>
       <div class="hud">
@@ -87,27 +87,27 @@ canvas{position:absolute;inset:0;width:100%;height:100%;z-index:4}
 </div>
 <script>
 const canvas=document.getElementById('fx'),ctx=canvas.getContext('2d'),petri=document.getElementById('petri');
-const agCrystal=document.getElementById('agCrystal'),kiCrystal=document.getElementById('kiCrystal');
+const agCrystal=document.getElementById('agCrystal'),kiCrystal=document.getElementById('kiCrystal'),waterGlow=document.getElementById('waterGlow'),agLabel=document.getElementById('agLabel'),kiLabel=document.getElementById('kiLabel');
 const waterBtn=document.getElementById('waterBtn'),agBtn=document.getElementById('agBtn'),kiBtn=document.getElementById('kiBtn'),startBtn=document.getElementById('startBtn'),pauseBtn=document.getElementById('pauseBtn'),resetBtn=document.getElementById('resetBtn');
 const result=document.getElementById('result'),currentStep=document.getElementById('currentStep'),hudText=document.getElementById('hudText');
 let state=0,running=false,paused=false,ions=[],precip=[],raf=null,last=0;
 function resize(){const r=petri.getBoundingClientRect(),d=devicePixelRatio||1;canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);canvas.style.width=r.width+'px';canvas.style.height=r.height+'px';ctx.setTransform(d,0,0,d,0,0)}
-addEventListener('resize',resize);setTimeout(resize,0);
+addEventListener('resize',resize);setTimeout(()=>{resize();clear();},0);
 function dims(){return {w:canvas.clientWidth,h:canvas.clientHeight}}
 function step(title,text){currentStep.innerHTML=`<b>${title}</b><span>${text}</span>`}
-waterBtn.onclick=()=>{if(state!==0)return;state=1;waterBtn.disabled=true;agBtn.disabled=false;step('2) ضع نترات الفضة','ضع بلورة AgNO₃ عند الطرف الأيسر من الطبق.');result.textContent='تم ملء الطبق بالماء المقطر.';hudText.textContent='الماء جاهز.'}
-agBtn.onclick=()=>{if(state!==1)return;state=2;agBtn.disabled=true;kiBtn.disabled=false;agCrystal.style.opacity='1';step('3) ضع يوديد البوتاسيوم','ضع بلورة KI عند الطرف المقابل.');result.textContent='تم وضع بلورة نترات الفضة عند أحد طرفي الطبق.'}
-kiBtn.onclick=()=>{if(state!==2)return;state=3;kiBtn.disabled=true;startBtn.disabled=false;kiCrystal.style.opacity='1';step('4) راقب الانتشار','ابدأ التجربة وشاهد الأيونات تنتشر في الماء.');result.textContent='البلورتان في موضعهما. اضغط بدء الانتشار.'}
+waterBtn.onclick=()=>{if(state!==0)return;state=1;waterBtn.disabled=true;agBtn.disabled=false;waterGlow.classList.add('show');step('2) ضع نترات الفضة','ضع بلورة AgNO₃ عند الطرف الأيسر من الطبق.');result.textContent='تم ملء الطبق بالماء المقطر.';hudText.textContent='الماء جاهز.'}
+agBtn.onclick=()=>{if(state!==1)return;state=2;agBtn.disabled=true;kiBtn.disabled=false;agCrystal.style.opacity='1';agLabel.classList.add('show');step('3) ضع يوديد البوتاسيوم','ضع بلورة KI عند الطرف المقابل.');result.textContent='تم وضع بلورة نترات الفضة عند أحد طرفي الطبق.'}
+kiBtn.onclick=()=>{if(state!==2)return;state=3;kiBtn.disabled=true;startBtn.disabled=false;kiCrystal.style.opacity='1';kiLabel.classList.add('show');step('4) راقب الانتشار','ابدأ التجربة وشاهد الأيونات تنتشر في الماء.');result.textContent='البلورتان في موضعهما. اضغط بدء الانتشار.'}
 startBtn.onclick=()=>{if(state!==3)return;state=4;running=true;paused=false;startBtn.disabled=true;pauseBtn.disabled=false;agCrystal.classList.add('dissolving');kiCrystal.classList.add('dissolving');result.textContent='تذوب البلورتان وتنتشر الأيونات داخل الماء…';hudText.textContent='انتشار الأيونات جارٍ.';seed();last=performance.now();animate(last)}
 pauseBtn.onclick=()=>{if(!running)return;paused=!paused;pauseBtn.textContent=paused?'متابعة':'إيقاف مؤقت';if(!paused){last=performance.now();animate(last)}}
 resetBtn.onclick=reset;
-function reset(){cancelAnimationFrame(raf);state=0;running=false;paused=false;ions=[];precip=[];agCrystal.classList.remove('dissolving');kiCrystal.classList.remove('dissolving');agCrystal.style.opacity='1';kiCrystal.style.opacity='1';waterBtn.disabled=false;agBtn.disabled=true;kiBtn.disabled=true;startBtn.disabled=true;pauseBtn.disabled=true;pauseBtn.textContent='إيقاف مؤقت';result.textContent='ابدأ بملء طبق بتري بالماء المقطر.';hudText.textContent='ضع البلورتين على طرفي الطبق.';step('1) جهّز طبق بتري','املأ طبق بتري بماء مقطر.');clear()}
-function seed(){const {w,h}=dims();for(let i=0;i<26;i++){spawn('Ag',w*.16,h*.5);spawn('NO3',w*.16,h*.5);spawn('K',w*.84,h*.5);spawn('I',w*.84,h*.5)}}
+function reset(){cancelAnimationFrame(raf);state=0;running=false;paused=false;ions=[];precip=[];agCrystal.classList.remove('dissolving');kiCrystal.classList.remove('dissolving');agCrystal.style.opacity='0';kiCrystal.style.opacity='0';waterGlow.classList.remove('show');agLabel.classList.remove('show');kiLabel.classList.remove('show');waterBtn.disabled=false;agBtn.disabled=true;kiBtn.disabled=true;startBtn.disabled=true;pauseBtn.disabled=true;pauseBtn.textContent='إيقاف مؤقت';result.textContent='ابدأ بملء طبق بتري بالماء المقطر.';hudText.textContent='ضع البلورتين على طرفي الطبق.';step('1) جهّز طبق بتري','املأ طبق بتري بماء مقطر.');clear()}
+function seed(){const {w,h}=dims();for(let i=0;i<10;i++){spawn('Ag',w*.16,h*.5);spawn('NO3',w*.16,h*.5);spawn('K',w*.84,h*.5);spawn('I',w*.84,h*.5)}}
 const colors={Ag:'#eef4f8',NO3:'#79d9ff',K:'#c79aff',I:'#f2ce48'};
-function spawn(type,x,y){const {w,h}=dims();let dir=(type==='Ag'||type==='NO3')?1:-1;ions.push({type,x:x+(Math.random()-.5)*10,y:y+(Math.random()-.5)*26,vx:dir*(.28+Math.random()*.22),vy:(Math.random()-.5)*.36,r:2.5+Math.random()*1.8,alive:true})}
+function spawn(type,x,y){const {w,h}=dims();let dir=(type==='Ag'||type==='NO3')?1:-1;const base={Ag:.19,NO3:.24,K:.22,I:.36}[type];ions.push({type,x:x+(Math.random()-.5)*8,y:y+(Math.random()-.5)*22,vx:dir*(base+Math.random()*.07),vy:(Math.random()-.5)*.28,r:2.5+Math.random()*1.5,alive:true})}
 function clear(){ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight)}
 function insideEllipse(x,y,w,h){const cx=w/2,cy=h/2,rx=w*.43,ry=h*.34;return ((x-cx)*(x-cx))/(rx*rx)+((y-cy)*(y-cy))/(ry*ry)<=1}
-function addMore(){const {w,h}=dims();if(Math.random()<.26){spawn('Ag',w*.16,h*.5);spawn('NO3',w*.16,h*.5)}if(Math.random()<.26){spawn('K',w*.84,h*.5);spawn('I',w*.84,h*.5)}}
+function addMore(){const {w,h}=dims();if(Math.random()<.18){spawn('Ag',w*.16,h*.5);spawn('NO3',w*.16,h*.5)}if(Math.random()<.22){spawn('K',w*.84,h*.5);spawn('I',w*.84,h*.5)}}
 function react(){for(let a of ions){if(!a.alive||a.type!=='Ag')continue;for(let b of ions){if(!b.alive||b.type!=='I')continue;let dx=a.x-b.x,dy=a.y-b.y;if(dx*dx+dy*dy<75){a.alive=b.alive=false;precip.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2,r:2+Math.random()*2,alpha:.35+Math.random()*.45});if(precip.length===1){result.innerHTML='<b>الملاحظة:</b> بدأ تكوّن راسب أصفر من يوديد الفضة AgI عند التقاء أيونات Ag⁺ و I⁻.';hudText.textContent='بدأ ظهور راسب أصفر AgI.'}break}}}
 }
 function animate(now){if(!running||paused)return;const {w,h}=dims(),dt=Math.min(2,(now-last)/16.67);last=now;addMore();clear();
