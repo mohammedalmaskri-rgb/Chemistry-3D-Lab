@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>مختبر الانتشار في السوائل ثلاثي الأبعاد</title>
+<style>
+:root{
+  --bg:#07131f;--panel:#0d2233;--panel2:#0a1b29;--text:#eef7ff;--muted:#a9bfd0;
+  --accent:#35c3b7;--accent2:#56e0d3;--danger:#8a3540;--line:#ffffff1a;
+  --glass:#a8e2ff66;--metal:#c1ccd6;--yellow:#f5d648;--water:#73d6f255;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Tahoma,Arial,sans-serif;background:radial-gradient(circle at 50% -10%,#163954 0,#07131f 48%,#03080d 100%);color:var(--text)}
+body{padding-bottom:max(14px,env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;background:#06111ce8;border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+header h1{font-size:20px;margin:0}.tag{font-size:12px;color:#cfe8f5;background:#103049;padding:7px 10px;border-radius:999px}
+.wrap{max-width:1180px;margin:auto;padding:16px;display:grid;gap:16px}
+.sceneCard,.panel{background:linear-gradient(180deg,#10283cee,#091a28ee);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 45px #0008}
+.sceneCard{overflow:hidden}
+.sceneHead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.sceneHead strong{font-size:16px}.sceneHead span{font-size:12px;color:var(--muted)}
+.scene{position:relative;height:640px;overflow:hidden;background:linear-gradient(#0d2941 0 58%,#765f50 58% 100%)}
+.labwall{position:absolute;inset:0 0 42% 0;background:linear-gradient(90deg,#0d2235 0 3%,transparent 3% 97%,#0d2235 97%),linear-gradient(#0d2235,#17364f)}
+.shelf{position:absolute;left:8%;right:8%;top:14%;height:14px;border-radius:8px;background:linear-gradient(#dde7ed,#75818a);box-shadow:0 8px 18px #0007}
+.bottle{position:absolute;top:16%;width:44px;height:70px;border:3px solid #c6ecff88;border-top:none;border-radius:7px 7px 18px 18px;box-shadow:inset 0 0 12px #bceaff22}.b1{left:14%;background:linear-gradient(transparent 50%,#f8d96a66 51%)}.b2{left:22%;background:linear-gradient(transparent 50%,#70d7ee55 51%)}.b3{right:18%;background:linear-gradient(transparent 50%,#c99aef55 51%)}
+.bench{position:absolute;left:4%;right:4%;bottom:0;height:42%;background:linear-gradient(180deg,#776152,#4d4037);box-shadow:0 -12px 30px #0006}
+.petri{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);width:min(78vw,640px);aspect-ratio:1.8/1;border-radius:50%;border:5px solid #c8edff99;background:radial-gradient(ellipse at 50% 45%,#bff2ff22 0 60%,#61cbe63b 61% 100%);box-shadow:inset 0 0 34px #bdefff44,0 22px 40px #0008;overflow:hidden}
+.petri:before{content:"";position:absolute;inset:7%;border-radius:50%;border:2px solid #dff7ff44;box-shadow:inset 0 0 25px #8de2ff28}
+.waterglow{position:absolute;inset:13%;border-radius:50%;background:radial-gradient(ellipse,#9fe9ff1c,#5bc6e628);filter:blur(.2px)}
+.crystal{position:absolute;top:50%;width:26px;height:26px;transform:translateY(-50%) rotate(45deg);border-radius:4px;box-shadow:0 0 18px currentColor;transition:.35s;z-index:5}.crystal.left{left:9%;background:#e8ecf1;color:#cfd7df}.crystal.right{right:9%;background:#f4e17c;color:#f4e17c}.crystal.dissolving{transform:translateY(-50%) rotate(45deg) scale(.25);opacity:.25}
+.crLabel{position:absolute;top:68%;font-size:12px;padding:6px 8px;background:#07131fdc;border:1px solid #ffffff20;border-radius:9px;z-index:6}.crLabel.left{left:3%}.crLabel.right{right:3%}
+canvas{position:absolute;inset:0;width:100%;height:100%;z-index:4}
+.hud{position:absolute;left:16px;bottom:16px;right:16px;display:flex;gap:10px;flex-wrap:wrap;z-index:8;pointer-events:none}.chip{background:#06111cd9;border:1px solid #ffffff18;border-radius:12px;padding:9px 11px;font-size:12px;color:#d9e8f3;box-shadow:0 8px 18px #0005}.chip b{color:#fff}
+.panel{padding:16px}.current{border:1px solid #35c3b799;background:#35c3b710;border-radius:16px;padding:13px 14px;line-height:1.7;margin-bottom:12px}.current b{display:block;font-size:15px;margin-bottom:3px}.current span{font-size:13px;color:#c8d9e5}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:1px solid #ffffff1a;background:#17344d;color:#fff;border-radius:14px;padding:13px 14px;font-size:15px;font-weight:700;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#1f9d93,#39cabc)}.btn.danger{background:#6f2e37}.btn:disabled{opacity:.42;cursor:not-allowed}.btn.full{grid-column:1/-1}
+.result{margin-top:12px;background:#ffffff08;border:1px solid #ffffff12;border-radius:14px;padding:12px 13px;min-height:76px;line-height:1.8;font-size:13px}.eq{margin-top:10px;padding:10px 12px;border-radius:12px;background:#06111ca8;border:1px solid #ffffff12;font-family:Arial,sans-serif;direction:ltr;text-align:center}.legend{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.8}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:5px;vertical-align:middle}
+.dot.ag{background:#e8eef4}.dot.no3{background:#79d9ff}.dot.k{background:#c79aff}.dot.i{background:#f2ce48}.dot.ppt{background:#f5d648;box-shadow:0 0 8px #f5d648}
+.warn{margin-top:10px;font-size:11px;color:#ffd28b}
+@media(min-width:920px){.wrap{grid-template-columns:1.55fr .85fr;align-items:start}.sceneCard{grid-column:1}.panel{grid-column:2;grid-row:1}.scene{height:690px}.controls{grid-template-columns:1fr}}
+@media(max-width:700px){header h1{font-size:17px}.tag{display:none}.wrap{padding:10px}.scene{height:520px}.petri{width:88vw;max-width:540px;top:55%}.sceneHead{padding:12px}.panel{padding:12px}.controls{grid-template-columns:1fr}.btn{font-size:16px;padding:14px}.crLabel{font-size:10px}.hud{left:10px;right:10px;bottom:10px}.chip{font-size:11px;padding:7px 9px}}
+@media(max-width:430px){.scene{height:460px}.petri{width:92vw}.shelf{top:11%}.bottle{top:13%;transform:scale(.86)}.current{font-size:14px}.sceneHead span{display:none}}
+</style>
+</head>
+<body>
+<header><h1>مختبر الانتشار في السوائل ثلاثي الأبعاد</h1><div class="tag">محاكاة تعليمية</div></header>
+<div class="wrap">
+  <section class="sceneCard">
+    <div class="sceneHead"><strong>انتشار الأيونات وتكوّن راسب يوديد الفضة</strong><span>طبق بتري • ماء مقطر • AgNO₃ • KI</span></div>
+    <div class="scene" id="scene">
+      <div class="labwall"></div><div class="shelf"></div>
+      <div class="bottle b1"></div><div class="bottle b2"></div><div class="bottle b3"></div>
+      <div class="bench"></div>
+      <div class="petri" id="petri">
+        <div class="waterglow"></div>
+        <div class="crystal left" id="agCrystal"></div>
+        <div class="crystal right" id="kiCrystal"></div>
+        <div class="crLabel left">بلورة نترات الفضة AgNO₃</div>
+        <div class="crLabel right">بلورة يوديد البوتاسيوم KI</div>
+        <canvas id="fx"></canvas>
+      </div>
+      <div class="hud">
+        <div class="chip"><b>الماء:</b> مقطر</div>
+        <div class="chip"><b>الملاحظة:</b> <span id="hudText">ضع البلورتين على طرفي الطبق.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <div class="current" id="currentStep"><b>1) جهّز طبق بتري</b><span>املأ طبق بتري بماء مقطر.</span></div>
+    <div class="controls">
+      <button class="btn primary" id="waterBtn">ملء الطبق بالماء المقطر</button>
+      <button class="btn" id="agBtn" disabled>وضع بلورة AgNO₃</button>
+      <button class="btn" id="kiBtn" disabled>وضع بلورة KI</button>
+      <button class="btn primary" id="startBtn" disabled>بدء الانتشار</button>
+      <button class="btn" id="pauseBtn" disabled>إيقاف مؤقت</button>
+      <button class="btn danger" id="resetBtn">إعادة التجربة</button>
+    </div>
+    <div class="result" id="result">ابدأ بملء طبق بتري بالماء المقطر.</div>
+    <div class="eq" id="eq">Ag⁺(aq) + I⁻(aq) → AgI(s)</div>
+    <div class="legend">
+      <div><span class="dot ag"></span> Ag⁺ &nbsp; <span class="dot no3"></span> NO₃⁻</div>
+      <div><span class="dot k"></span> K⁺ &nbsp; <span class="dot i"></span> I⁻ &nbsp; <span class="dot ppt"></span> AgI(s)</div>
+      <div class="warn">هذه محاكاة تعليمية. تُنفّذ التجربة الحقيقية في مختبر وتحت إشراف المعلم.</div>
+    </div>
+  </aside>
+</div>
+<script>
+const canvas=document.getElementById('fx'),ctx=canvas.getContext('2d'),petri=document.getElementById('petri');
+const agCrystal=document.getElementById('agCrystal'),kiCrystal=document.getElementById('kiCrystal');
+const waterBtn=document.getElementById('waterBtn'),agBtn=document.getElementById('agBtn'),kiBtn=document.getElementById('kiBtn'),startBtn=document.getElementById('startBtn'),pauseBtn=document.getElementById('pauseBtn'),resetBtn=document.getElementById('resetBtn');
+const result=document.getElementById('result'),currentStep=document.getElementById('currentStep'),hudText=document.getElementById('hudText');
+let state=0,running=false,paused=false,ions=[],precip=[],raf=null,last=0;
+function resize(){const r=petri.getBoundingClientRect(),d=devicePixelRatio||1;canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);canvas.style.width=r.width+'px';canvas.style.height=r.height+'px';ctx.setTransform(d,0,0,d,0,0)}
+addEventListener('resize',resize);setTimeout(resize,0);
+function dims(){return {w:canvas.clientWidth,h:canvas.clientHeight}}
+function step(title,text){currentStep.innerHTML=`<b>${title}</b><span>${text}</span>`}
+waterBtn.onclick=()=>{if(state!==0)return;state=1;waterBtn.disabled=true;agBtn.disabled=false;step('2) ضع نترات الفضة','ضع بلورة AgNO₃ عند الطرف الأيسر من الطبق.');result.textContent='تم ملء الطبق بالماء المقطر.';hudText.textContent='الماء جاهز.'}
+agBtn.onclick=()=>{if(state!==1)return;state=2;agBtn.disabled=true;kiBtn.disabled=false;agCrystal.style.opacity='1';step('3) ضع يوديد البوتاسيوم','ضع بلورة KI عند الطرف المقابل.');result.textContent='تم وضع بلورة نترات الفضة عند أحد طرفي الطبق.'}
+kiBtn.onclick=()=>{if(state!==2)return;state=3;kiBtn.disabled=true;startBtn.disabled=false;kiCrystal.style.opacity='1';step('4) راقب الانتشار','ابدأ التجربة وشاهد الأيونات تنتشر في الماء.');result.textContent='البلورتان في موضعهما. اضغط بدء الانتشار.'}
+startBtn.onclick=()=>{if(state!==3)return;state=4;running=true;paused=false;startBtn.disabled=true;pauseBtn.disabled=false;agCrystal.classList.add('dissolving');kiCrystal.classList.add('dissolving');result.textContent='تذوب البلورتان وتنتشر الأيونات داخل الماء…';hudText.textContent='انتشار الأيونات جارٍ.';seed();last=performance.now();animate(last)}
+pauseBtn.onclick=()=>{if(!running)return;paused=!paused;pauseBtn.textContent=paused?'متابعة':'إيقاف مؤقت';if(!paused){last=performance.now();animate(last)}}
+resetBtn.onclick=reset;
+function reset(){cancelAnimationFrame(raf);state=0;running=false;paused=false;ions=[];precip=[];agCrystal.classList.remove('dissolving');kiCrystal.classList.remove('dissolving');agCrystal.style.opacity='1';kiCrystal.style.opacity='1';waterBtn.disabled=false;agBtn.disabled=true;kiBtn.disabled=true;startBtn.disabled=true;pauseBtn.disabled=true;pauseBtn.textContent='إيقاف مؤقت';result.textContent='ابدأ بملء طبق بتري بالماء المقطر.';hudText.textContent='ضع البلورتين على طرفي الطبق.';step('1) جهّز طبق بتري','املأ طبق بتري بماء مقطر.');clear()}
+function seed(){const {w,h}=dims();for(let i=0;i<26;i++){spawn('Ag',w*.16,h*.5);spawn('NO3',w*.16,h*.5);spawn('K',w*.84,h*.5);spawn('I',w*.84,h*.5)}}
+const colors={Ag:'#eef4f8',NO3:'#79d9ff',K:'#c79aff',I:'#f2ce48'};
+function spawn(type,x,y){const {w,h}=dims();let dir=(type==='Ag'||type==='NO3')?1:-1;ions.push({type,x:x+(Math.random()-.5)*10,y:y+(Math.random()-.5)*26,vx:dir*(.28+Math.random()*.22),vy:(Math.random()-.5)*.36,r:2.5+Math.random()*1.8,alive:true})}
+function clear(){ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight)}
+function insideEllipse(x,y,w,h){const cx=w/2,cy=h/2,rx=w*.43,ry=h*.34;return ((x-cx)*(x-cx))/(rx*rx)+((y-cy)*(y-cy))/(ry*ry)<=1}
+function addMore(){const {w,h}=dims();if(Math.random()<.26){spawn('Ag',w*.16,h*.5);spawn('NO3',w*.16,h*.5)}if(Math.random()<.26){spawn('K',w*.84,h*.5);spawn('I',w*.84,h*.5)}}
+function react(){for(let a of ions){if(!a.alive||a.type!=='Ag')continue;for(let b of ions){if(!b.alive||b.type!=='I')continue;let dx=a.x-b.x,dy=a.y-b.y;if(dx*dx+dy*dy<75){a.alive=b.alive=false;precip.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2,r:2+Math.random()*2,alpha:.35+Math.random()*.45});if(precip.length===1){result.innerHTML='<b>الملاحظة:</b> بدأ تكوّن راسب أصفر من يوديد الفضة AgI عند التقاء أيونات Ag⁺ و I⁻.';hudText.textContent='بدأ ظهور راسب أصفر AgI.'}break}}}
+}
+function animate(now){if(!running||paused)return;const {w,h}=dims(),dt=Math.min(2,(now-last)/16.67);last=now;addMore();clear();
+  for(const p of ions){if(!p.alive)continue;p.x+=p.vx*dt;p.y+=p.vy*dt+(Math.random()-.5)*.18;if(!insideEllipse(p.x,p.y,w,h)){p.x-=p.vx*dt*2;p.y-=p.vy*dt*2;p.vy*=-.7}ctx.beginPath();ctx.fillStyle=colors[p.type];ctx.globalAlpha=.88;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
+  react();ions=ions.filter(p=>p.alive);
+  for(const q of precip){ctx.save();ctx.globalAlpha=q.alpha;ctx.shadowColor='#f5d648';ctx.shadowBlur=9;ctx.fillStyle='#f5d648';ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,Math.PI*2);ctx.fill();ctx.restore()}
+  ctx.globalAlpha=1;
+  if(precip.length>90){running=false;pauseBtn.disabled=true;step('5) سجّل الملاحظة','لاحظ مكان الراسب الأصفر وفسّر سبب تكوّنه.');result.innerHTML='<b>النتيجة:</b> تكوّن راسب أصفر من يوديد الفضة AgI نتيجة اتحاد أيونات Ag⁺ مع I⁻ بعد انتشارها في الماء.<br><b>المعادلة الأيونية:</b> Ag⁺(aq) + I⁻(aq) → AgI(s)';hudText.textContent='اكتملت التجربة.';return}
+  raf=requestAnimationFrame(animate)
+}
+</script>
+</body>
+</html>
