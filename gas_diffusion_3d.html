@@ -2,199 +2,127 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>مختبر الانتشار ثلاثي الأبعاد</title>
 <style>
-:root{
-  --ink:#1d2731;--muted:#667481;--line:#d9e0e5;--panel:#f7f9fa;
-  --accent:#197c7a;--accent2:#0f5f5d;--danger:#a93c43;--warn:#d49a21;
-  --bench:#3e454b;--steel:#b9c2c8;--wall:#e9eef1;--glass:#d8f1fb80;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#eef2f4;color:var(--ink);min-height:100vh}
-header{height:68px;padding:0 22px;background:#fdfefe;border-bottom:1px solid #ccd5da;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px #00000012;position:sticky;top:0;z-index:20}
-header h1{font-size:19px;margin:0;font-weight:800}.tag{font-size:12px;color:#46555f;background:#eef3f5;border:1px solid #d8e0e4;padding:7px 11px;border-radius:999px}
-.app{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;padding:18px;max-width:1500px;margin:auto}
-.panel{background:#fff;border:1px solid #d5dde1;border-radius:16px;padding:16px;box-shadow:0 12px 28px #00000012;align-self:start}
-.panel h2{font-size:16px;margin:0 0 12px}.step{padding:11px 12px;border-radius:11px;background:#f5f7f8;margin:8px 0;border:1px solid #e0e6e9;transition:.2s}.step.active{border-color:#93c7c5;background:#e9f4f3}.step b{display:block;font-size:14px}.step span{font-size:12px;color:var(--muted)}
-.controls{display:grid;gap:9px;margin-top:14px}.btn{border:1px solid #cdd6db;border-radius:10px;padding:11px 13px;font-weight:700;cursor:pointer;background:#fff;color:#24313a;box-shadow:0 2px 4px #00000008}.btn:hover{background:#f6f8f9}.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}.btn.danger{background:#fff3f3;color:#8e3038;border-color:#e7b7ba}.btn:disabled{opacity:.45;cursor:not-allowed}
-.result{margin-top:12px;padding:12px;border-radius:11px;background:#f6f8f9;border:1px solid #e0e6e9;font-size:13px;line-height:1.7;min-height:88px}.legend{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7}.warn{font-size:11px;color:#7c5a19;margin-top:10px;background:#fff8e7;border:1px solid #f0dfae;padding:9px;border-radius:9px}
-.sceneWrap{min-height:720px}.scene{height:720px;border-radius:18px;overflow:hidden;position:relative;background:#eef1f2;border:1px solid #cfd8dc;box-shadow:0 16px 35px #00000016}
-/* lab room */
-.wall{position:absolute;inset:0 0 34% 0;background:linear-gradient(#f2f5f6,#e5ebee)}
-.tiles{position:absolute;inset:0 0 34% 0;background-image:linear-gradient(#d5dde1 1px,transparent 1px),linear-gradient(90deg,#d5dde1 1px,transparent 1px);background-size:84px 84px;opacity:.55}
-.window{position:absolute;left:5%;top:7%;width:28%;height:24%;background:linear-gradient(180deg,#d7ebf6,#bcd7e6);border:10px solid #f9fbfc;box-shadow:0 0 0 1px #bec9cf,0 8px 25px #00000012 inset}
-.window:after{content:"";position:absolute;left:50%;top:0;bottom:0;width:4px;background:#f9fbfc}
-.cabinet{position:absolute;right:5%;top:6%;width:28%;height:25%;background:linear-gradient(#f8fafb,#e8edef);border:1px solid #cad4d9;box-shadow:0 8px 18px #00000010}
-.cabinet:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:#cfd7db}.cabinet:after{content:"";position:absolute;left:48%;top:46%;width:4%;height:8px;border-radius:4px;background:#7f8b93;box-shadow:18px 0 0 #7f8b93}
-.shelf{position:absolute;left:39%;right:36%;top:13%;height:12px;background:linear-gradient(#d9e1e5,#a9b5bc);box-shadow:0 6px 10px #0000001c}
-.bottle{position:absolute;top:15%;width:38px;height:70px;border:2px solid #c8d2d7;border-radius:5px 5px 12px 12px;background:linear-gradient(#ffffffbb,#eff6f8aa);box-shadow:inset 0 0 10px #fff,0 3px 8px #00000016}.bottle:before{content:"";position:absolute;top:-13px;left:9px;width:16px;height:14px;background:#5b646a;border-radius:3px}.bottle:after{content:"";position:absolute;left:5px;right:5px;bottom:12px;height:28px;border-radius:4px;background:#d6b76788}.b1{left:42%}.b2{left:48%}.b2:after{background:#8dc5d388}.b3{left:54%}.b3:after{background:#c6a7d688}
-.benchBack{position:absolute;left:0;right:0;bottom:22%;height:16%;background:linear-gradient(#586067,#3c4348);border-top:10px solid #252b2f;box-shadow:0 -4px 20px #0000001c}
-.cupboard{position:absolute;bottom:0;height:22%;width:26%;background:linear-gradient(#f5f7f8,#dfe6e9);border:1px solid #c8d2d6}.cupboard.left{left:3%}.cupboard.right{right:3%}.cupboard:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:#c9d2d6}.cupboard:after{content:"";position:absolute;left:46%;top:22%;width:8%;height:8px;background:#7c878e;border-radius:4px;box-shadow:18px 0 0 #7c878e}
-/* apparatus */
-.rig{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);width:min(84%,920px);height:330px}
-.base{position:absolute;left:14%;right:14%;bottom:20px;height:20px;border-radius:50%;background:linear-gradient(#ced6da,#7d8a92);box-shadow:0 8px 13px #0003}
-.post{position:absolute;bottom:36px;width:12px;height:230px;background:linear-gradient(90deg,#7c8991,#e6ecef,#87949c);border-radius:7px;box-shadow:0 6px 12px #0003}.post.left{left:18%}.post.right{right:18%}
-.clamp{position:absolute;top:82px;width:105px;height:11px;border-radius:7px;background:linear-gradient(#e1e7ea,#77848c);box-shadow:0 5px 8px #0002}.clamp.left{left:16%}.clamp.right{right:16%}
-.tube{position:absolute;left:8%;right:8%;top:112px;height:88px;border:4px solid #bed3dc;border-radius:46px;background:linear-gradient(180deg,#ffffff75,#dff4fb44 45%,#ffffff33);box-shadow:inset 0 0 22px #ffffffaa,0 10px 24px #0002;overflow:hidden}
-.tube:before,.tube:after{content:"";position:absolute;top:-4px;width:32px;height:88px;border:4px solid #bed3dc;background:#eef9fd88}.tube:before{left:-4px;border-radius:46px 0 0 46px}.tube:after{right:-4px;border-radius:0 46px 46px 0}
-.cotton{position:absolute;top:124px;width:38px;height:64px;border-radius:45%;background:radial-gradient(circle,#fff 0 38%,#eef1f2 40% 62%,#d5dcdf 64%);box-shadow:0 3px 12px #0002;opacity:.35;transition:.35s}.cotton.left{left:9.4%}.cotton.right{right:9.4%}.cotton.loaded{opacity:1}.cotton.left.loaded{box-shadow:0 3px 14px #68b7c055}.cotton.right.loaded{box-shadow:0 3px 14px #c59a7155}
-.label{position:absolute;padding:6px 9px;border-radius:8px;background:#ffffffee;border:1px solid #ccd6db;font-size:12px;color:#34434d;box-shadow:0 3px 8px #0001}.labNH3{left:4%;top:211px}.labHCl{right:4%;top:211px}.ringLabel{left:44%;top:62px;opacity:0;transition:.3s}.ringLabel.show{opacity:1}
-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.hud{position:absolute;left:20px;bottom:24px;background:#ffffffeb;border:1px solid #d5dde1;border-radius:12px;padding:10px 12px;font-size:12px;color:#4c5a64;max-width:300px;box-shadow:0 5px 14px #0001}.meter{height:7px;border-radius:999px;background:#e7ecef;margin-top:7px;overflow:hidden}.meter>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6abec6,#d4dadd,#c6a17c);transition:width .2s}
-.safety{position:absolute;right:20px;bottom:24px;width:86px;height:45px;background:#f6f8f9;border:1px solid #d5dde1;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#68757e;font-size:11px;box-shadow:0 5px 14px #0001}
+:root{--bg:#07131f;--panel:#102234;--panel2:#0b1a29;--text:#eef7ff;--muted:#a9c0d5;--accent:#4fd1c5;--danger:#ff7a7a;--glass:#8fd3ff55;--metal:#b7c6d3;--yellow:#ffe27a}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:radial-gradient(circle at 50% 0,#163653 0,#07131f 55%,#03080d 100%);color:var(--text);min-height:100vh;overflow-x:hidden}
+header{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff18;background:#06111ccc;backdrop-filter:blur(8px);position:sticky;top:0;z-index:10}
+header h1{font-size:20px;margin:0}header .tag{font-size:12px;color:#b8d7ef;background:#0f2a40;padding:7px 10px;border-radius:999px}
+.app{display:grid;grid-template-columns:330px 1fr;gap:18px;padding:18px;max-width:1500px;margin:auto}.panel{background:linear-gradient(180deg,#102234ee,#0a1826ee);border:1px solid #ffffff1c;border-radius:18px;padding:16px;box-shadow:0 18px 50px #0008}.panel h2{font-size:17px;margin:0 0 12px}.step{padding:11px 12px;border-radius:13px;background:#ffffff08;margin:8px 0;border:1px solid transparent;transition:.2s}.step.active{border-color:#4fd1c5aa;background:#4fd1c515}.step b{display:block;font-size:14px}.step span{font-size:12px;color:var(--muted)}
+.controls{display:grid;gap:9px;margin-top:14px}.btn{border:0;border-radius:12px;padding:11px 13px;font-weight:700;cursor:pointer;background:#17324a;color:#fff;border:1px solid #ffffff18}.btn:hover{filter:brightness(1.1)}.btn.primary{background:linear-gradient(135deg,#1c9a90,#3fc6b8)}.btn.danger{background:#6c2a31}.btn:disabled{opacity:.45;cursor:not-allowed}
+.legend{margin-top:14px;padding-top:12px;border-top:1px solid #ffffff18;font-size:12px;color:var(--muted)}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:6px;vertical-align:middle}.dot.nh3{background:#6fe7ff}.dot.hcl{background:#ff9b7a}.dot.nh4cl{background:white;box-shadow:0 0 8px white}
+.sceneWrap{min-height:720px;position:relative;perspective:1200px}.scene{height:720px;border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(#0a1623 0 58%,#172536 58% 61%,#5f5147 61% 100%);border:1px solid #ffffff1c;box-shadow:inset 0 0 60px #0008}
+.labwall{position:absolute;inset:0 0 39% 0;background:linear-gradient(90deg,#0f263a 0 2%,transparent 2% 98%,#0f263a 98%),linear-gradient(#0c1f31,#102b43);}
+.shelf{position:absolute;left:7%;right:7%;top:16%;height:18px;background:linear-gradient(#c0ccd5,#6f7d88);border-radius:5px;box-shadow:0 8px 15px #0008}
+.flask{position:absolute;top:18%;width:46px;height:74px;border:3px solid #bde7ff99;border-top:none;border-radius:6px 6px 20px 20px;background:linear-gradient(transparent 45%,#2cc7d755 46%);box-shadow:inset 0 0 15px #8fd3ff33}.f1{left:13%}.f2{left:21%;background:linear-gradient(transparent 45%,#d785ff55 46%)}.f3{right:17%;background:linear-gradient(transparent 45%,#ffd16655 46%)}
+.bench{position:absolute;left:8%;right:8%;bottom:15%;height:23%;background:linear-gradient(180deg,#7f6b5b,#4b3f37);transform:rotateX(58deg);transform-origin:bottom;box-shadow:0 -10px 30px #0006;border-radius:14px}
+.rig{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:min(82%,900px);height:320px;filter:drop-shadow(0 25px 18px #0008)}
+.base{position:absolute;left:16%;right:16%;bottom:10px;height:25px;border-radius:50%;background:linear-gradient(#8fa0ad,#3d4851)}
+.stand{position:absolute;bottom:30px;width:14px;height:225px;background:linear-gradient(90deg,#5c6973,#d6e1e8,#63717b);border-radius:7px}.stand.left{left:22%}.stand.right{right:22%}.clamp{position:absolute;top:75px;width:90px;height:12px;background:linear-gradient(#d3dee6,#65727c);border-radius:8px}.clamp.left{left:20%}.clamp.right{right:20%}
+.tube{position:absolute;left:10%;right:10%;top:103px;height:82px;border:4px solid #a8ddff99;border-radius:40px;background:linear-gradient(180deg,#c9efff20,#7bc8ff15 50%,#eefaff15);box-shadow:inset 0 0 22px #c3ebff22,0 0 20px #5ac8ff22;overflow:hidden;transform:rotateX(7deg)}
+.tube:before,.tube:after{content:"";position:absolute;top:-4px;width:28px;height:82px;border:4px solid #a8ddff99;background:#d7f3ff18}.tube:before{left:-3px;border-radius:40px 0 0 40px}.tube:after{right:-3px;border-radius:0 40px 40px 0}
+.cotton{position:absolute;top:115px;width:34px;height:58px;border-radius:45%;background:radial-gradient(circle,#fff 0 38%,#e8eef2 40% 60%,#cdd9df 63%);box-shadow:0 0 15px #fff6;opacity:.35;transition:.35s}.cotton.left{left:11%}.cotton.right{right:11%}.cotton.loaded{opacity:1}.cotton.left.loaded{box-shadow:0 0 24px #6fe7ff99}.cotton.right.loaded{box-shadow:0 0 24px #ff9b7a99}
+.labels{position:absolute;inset:0;pointer-events:none}.label{position:absolute;padding:7px 10px;border-radius:10px;background:#08131fe6;border:1px solid #ffffff22;font-size:12px;box-shadow:0 8px 18px #0006}.labNH3{left:7%;top:205px}.labHCl{right:7%;top:205px}.ringLabel{left:44%;top:50px;opacity:0;transition:.3s}.ringLabel.show{opacity:1}
+canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.hud{position:absolute;left:18px;bottom:18px;background:#06111ccc;border:1px solid #ffffff18;border-radius:14px;padding:10px 12px;font-size:12px;color:#c9d9e7;max-width:320px}.meter{height:7px;border-radius:999px;background:#ffffff14;margin-top:7px;overflow:hidden}.meter>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6fe7ff,#fff,#ff9b7a);transition:width .2s}
+.result{margin-top:12px;padding:12px;border-radius:12px;background:#ffffff08;color:#dceaf5;font-size:13px;line-height:1.7;min-height:84px}.warn{font-size:11px;color:#ffcf86;margin-top:10px}
 @media(max-width:900px){.app{grid-template-columns:1fr}.sceneWrap,.scene{height:620px}.sceneWrap{min-height:620px}.rig{width:95%;transform:translate(-50%,-50%) scale(.9)}}
 
-/* ===== Mobile-first responsive layer ===== */
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
-body{padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:contain}
-button,select,input{font:inherit}
-.btn{min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.panel,.scene{contain:layout paint style}
-
-/* Phone */
-@media (max-width:767px){
-  header{height:auto;min-height:58px;padding:10px 12px;gap:8px;align-items:flex-start;position:relative}
-  header h1{font-size:15px;line-height:1.45;max-width:72%}
-  header .tag,.tag{font-size:10px;padding:6px 8px;white-space:nowrap}
-  .layout,.app{display:flex!important;flex-direction:column!important;gap:10px!important;padding:10px!important;width:100%;max-width:none}
-  .panel{width:100%;padding:12px;border-radius:13px;box-shadow:0 5px 15px #0000000d}
-  .panel h2{font-size:15px}
-  .section{padding:10px;margin:8px 0}
-  .materials{grid-template-columns:1fr 1fr}
-  .chip{font-size:11px;padding:8px 5px}
-  .step{font-size:11.5px;padding:9px;margin:6px 0}
-  .step b{font-size:12.5px}
-  .step span{font-size:11px}
-  .controls{grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-  .btn{min-height:50px;padding:10px 8px;font-size:12px;border-radius:11px}
-  .controls .primary,.controls .reset,.controls .danger{grid-column:auto}
-  .ready,.legend,.warn,.result{font-size:11.5px;line-height:1.6}
-  .scene,.sceneWrap{width:100%;min-height:0!important;height:560px!important;border-radius:14px}
-  .window{left:4%;top:5%;width:30%;height:20%;border-width:6px}
-  .cabinet{right:4%;top:5%;width:30%;height:21%}
-  .shelf{top:12%;left:38%;right:36%}
-  .bottle{transform:scale(.76);transform-origin:top center}
-  .cupboard{height:18%;width:30%}
-  .status,.hud{left:10px;bottom:10px;max-width:62%;font-size:10.5px;padding:8px 9px}
-  .digital,.safety{right:10px;bottom:10px;font-size:10.5px;padding:8px 9px}
+/* Mobile-first layout: experiment above, steps below. Same visual identity as the cooling experiment. */
+@media(max-width:900px){
+  header{padding:13px 14px;position:relative} header h1{font-size:16px;line-height:1.5} header .tag{font-size:10px;padding:5px 8px}
+  .app{display:flex;flex-direction:column;gap:12px;padding:10px;width:100%;max-width:none}
+  .sceneWrap{order:1;min-height:0;height:auto;perspective:900px}
+  .scene{height:430px;border-radius:17px}
+  .panel{order:2;border-radius:17px;padding:13px;box-shadow:0 12px 32px #0007}
+  .panel h2{font-size:15px}.step{padding:10px;margin:7px 0}.step b{font-size:13px}.step span{font-size:11px}
+  .controls{gap:8px}.btn{min-height:48px;font-size:14px;padding:12px}
+  .rig{width:108%;height:270px;top:47%;transform:translate(-50%,-50%) scale(.82)}
+  .bench{left:2%;right:2%;bottom:8%;height:25%}.labwall{inset:0 0 34% 0}.shelf{top:10%}
+  .flask{top:13%;transform:scale(.8)}
+  .hud{left:10px;right:10px;bottom:10px;max-width:none;padding:8px 10px;font-size:11px}
+  .label{font-size:10px;padding:5px 7px}.labNH3{left:7%;top:192px}.labHCl{right:7%;top:192px}.ringLabel{top:42px}
+  .result{font-size:12px;min-height:65px}.warn{font-size:10px}
 }
-
-/* Small phones */
-@media (max-width:420px){
-  .controls{grid-template-columns:1fr}
-  .btn{min-height:52px;font-size:12.5px}
-  .scene,.sceneWrap{height:530px!important}
-}
-
-/* iPad / tablets - expands automatically */
-@media (min-width:768px) and (max-width:1180px){
-  header{padding:0 18px}
-  .layout,.app{grid-template-columns:300px minmax(0,1fr)!important;gap:14px!important;padding:14px!important;max-width:1180px}
-  .panel{padding:14px}
-  .btn{min-height:48px}
-  .scene,.sceneWrap{min-height:680px;height:680px}
-}
-
-/* Tablet portrait */
-@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
-  .layout,.app{grid-template-columns:1fr!important}
-  .panel{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
-  .panel>h2,.panel>.result,.panel>.legend,.panel>.warn,.panel>.ready{grid-column:1/-1}
-  .controls{grid-template-columns:repeat(3,1fr)}
-  .scene,.sceneWrap{height:720px;min-height:720px}
-}
-
-/* Large desktop */
-@media (min-width:1181px){
-  .layout,.app{max-width:1500px}
-}
-
-/* Phone landscape */
-@media (max-width:900px) and (orientation:landscape){
-  header{min-height:50px;padding:8px 12px}
-  .layout,.app{display:grid!important;grid-template-columns:280px minmax(0,1fr)!important;align-items:start}
-  .scene,.sceneWrap{height:510px!important}
-  .controls{grid-template-columns:1fr 1fr}
-}
-
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
-}
-
-@media (max-width:767px){
-  .sceneWrap,.scene{height:545px!important;min-height:545px!important}
-  .rig{left:50%;top:52%;width:112%;height:290px;transform:translate(-50%,-50%) scale(.84)!important;transform-origin:center center}
-  .tube{top:106px;height:78px}
-  .cotton{top:116px;height:58px}
-  .post{height:205px}
-  .clamp{top:72px}
-  .labNH3,.labHCl{top:194px;font-size:10px;padding:5px 7px}
-  .ringLabel{top:54px;font-size:10px}
-  .hud{max-width:66%}
-  .safety{width:78px;height:40px;font-size:9.5px}
-}
-@media (max-width:420px){
-  .rig{width:120%;transform:translate(-50%,-50%) scale(.78)!important}
-  .sceneWrap,.scene{height:520px!important;min-height:520px!important}
-}
-@media (min-width:768px) and (max-width:1180px){
-  .rig{width:94%;transform:translate(-50%,-50%) scale(.92)!important}
-}
-@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
-  .rig{width:92%;transform:translate(-50%,-50%) scale(.96)!important}
+@media(min-width:901px){
+  .app{grid-template-columns:350px minmax(0,1fr);align-items:start}
+  .scene{height:min(720px,calc(100vh - 105px))}.sceneWrap{min-height:min(720px,calc(100vh - 105px))}
 }
 
 </style>
 </head>
 <body>
-<header><h1>المختبر الإلكتروني — تجربة انتشار الغازات</h1><div class="tag">محاكاة تعليمية آمنة</div></header>
+<header><h1>المختبر الإلكتروني ثلاثي الأبعاد — تجربة انتشار الغازات</h1><div class="tag">محاكاة تعليمية آمنة</div></header>
 <div class="app">
   <aside class="panel">
-    <h2>خطوات التجربة</h2>
-    <div class="step active" id="s1"><b>1) جهّز الطرف الأيسر</b><span>ضع قطعة قطن مبللة بمحلول الأمونيا.</span></div>
-    <div class="step" id="s2"><b>2) جهّز الطرف الأيمن</b><span>ضع قطعة قطن مبللة بحمض الهيدروكلوريك.</span></div>
-    <div class="step" id="s3"><b>3) ابدأ الانتشار</b><span>راقب حركة الجزيئات داخل الأنبوبة الزجاجية.</span></div>
-    <div class="step" id="s4"><b>4) سجّل الملاحظة</b><span>حدد مكان تكوّن الحلقة البيضاء.</span></div>
-    <div class="controls">
-      <button class="btn" id="nh3Btn">تجهيز طرف NH₃</button>
-      <button class="btn" id="hclBtn" disabled>تجهيز طرف HCl</button>
-      <button class="btn primary" id="startBtn" disabled>بدء التجربة</button>
-      <button class="btn danger" id="resetBtn">إعادة التجربة</button>
+    <h2>مواد التجربة</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div class="btn" style="cursor:default;text-align:center">NH₃<br><small>الأمونيا</small></div>
+      <div class="btn" style="cursor:default;text-align:center">HCl<br><small>كلوريد الهيدروجين</small></div>
+      <select id="leftGas" hidden><option value="NH3" selected>NH3</option></select>
+      <select id="rightGas" hidden><option value="HCl" selected>HCl</option></select>
     </div>
-    <div class="result" id="result">ابدأ بتجهيز قطعة القطن في الطرف الأيسر.</div>
-    <div class="legend"><b>المواد:</b> محلول الأمونيا NH₃، حمض الهيدروكلوريك HCl، أنبوبة زجاجية، قطن.</div>
-    <div class="warn">هذه محاكاة تعليمية. التجربة الحقيقية تُجرى فقط في مختبر مجهز وتحت إشراف مختص.</div>
+    <h2>خطوات التجربة</h2>
+    <div class="step active" id="s1"><b>1) جهّز القطن</b><span>اختر المادة ثم جهّز قطعة القطن في الطرف الأيسر.</span></div>
+    <div class="step" id="s2"><b>2) جهّز الطرف الآخر</b><span>اختر المادة الثانية ثم جهّز الطرف الأيمن.</span></div>
+    <div class="step" id="s3"><b>3) ابدأ الانتشار</b><span>راقب حركة جزيئات الغاز داخل الأنبوب.</span></div>
+    <div class="step" id="s4"><b>4) سجّل الملاحظة</b><span>شاهد النتيجة التي تعتمد على المواد المختارة.</span></div>
+    <div class="controls">
+      <button class="btn" id="nh3Btn">🧪 تجهيز الطرف الأيسر</button>
+      <button class="btn" id="hclBtn" disabled>🧪 تجهيز الطرف الأيمن</button>
+      <button class="btn primary" id="startBtn" disabled>▶ بدء التجربة</button>
+      <button class="btn" id="pauseBtn" disabled>⏸ إيقاف مؤقت</button>
+      <button class="btn danger" id="resetBtn">↻ إعادة التجربة</button>
+    </div>
+    <div class="result" id="result">ابدأ بإضافة محلول الأمونيا إلى قطعة القطن.</div>
+    <div class="legend" id="legend">راقب انتشار NH₃ وHCl داخل الأنبوبة وتكوّن حلقة كلوريد الأمونيوم البيضاء.</div>
+    <div class="warn">هذه محاكاة تعليمية فقط. لا تُنفّذ التجربة الحقيقية إلا في مختبر مجهز وتحت إشراف مختص.</div>
   </aside>
+
   <main class="sceneWrap">
-    <div class="scene">
-      <div class="wall"></div><div class="tiles"></div><div class="window"></div><div class="cabinet"></div><div class="shelf"></div>
-      <div class="bottle b1"></div><div class="bottle b2"></div><div class="bottle b3"></div>
-      <div class="benchBack"></div><div class="cupboard left"></div><div class="cupboard right"></div>
+    <div class="scene" id="scene">
+      <div class="labwall"></div><div class="shelf"></div>
+      <div class="flask f1"></div><div class="flask f2"></div><div class="flask f3"></div>
+      <div class="bench"></div>
       <div class="rig">
-        <div class="base"></div><div class="post left"></div><div class="post right"></div><div class="clamp left"></div><div class="clamp right"></div>
-        <div class="tube"></div><div class="cotton left" id="cottonNH3"></div><div class="cotton right" id="cottonHCl"></div>
-        <canvas id="fx" width="900" height="330"></canvas>
-        <div class="label labNH3">NH₃ — الأمونيا</div><div class="label labHCl">HCl — كلوريد الهيدروجين</div><div class="label ringLabel" id="ringLabel">NH₄Cl — حلقة بيضاء</div>
+        <div class="base"></div><div class="stand left"></div><div class="stand right"></div>
+        <div class="clamp left"></div><div class="clamp right"></div>
+        <div class="tube" id="tube"></div>
+        <div class="cotton left" id="cottonNH3"></div><div class="cotton right" id="cottonHCl"></div>
+        <canvas id="fx" width="900" height="320"></canvas>
+        <div class="labels"><div class="label labNH3" id="leftLabel">الطرف الأيسر</div><div class="label labHCl" id="rightLabel">الطرف الأيمن</div><div class="label ringLabel" id="ringLabel">ناتج التفاعل</div></div>
       </div>
-      <div class="hud">مؤشر تقدم الانتشار<div class="meter"><i id="meter"></i></div><div id="speedText" style="margin-top:6px">الأمونيا تنتشر أسرع من HCl.</div></div>
-      <div class="safety">نظارات واقية<br>تهوية جيدة</div>
+      <div class="hud">سرعة الانتشار النسبية<div class="meter"><i id="meter"></i></div><div style="margin-top:6px" id="speedText">تتغير سرعة الانتشار حسب المادة المختارة.</div></div>
     </div>
   </main>
 </div>
 <script>
-const nh3Btn=document.getElementById('nh3Btn'),hclBtn=document.getElementById('hclBtn'),startBtn=document.getElementById('startBtn'),resetBtn=document.getElementById('resetBtn');
+const leftBtn=document.getElementById('nh3Btn'), rightBtn=document.getElementById('hclBtn'), startBtn=document.getElementById('startBtn'), pauseBtn=document.getElementById('pauseBtn'), resetBtn=document.getElementById('resetBtn');
+const leftGas=document.getElementById('leftGas'),rightGas=document.getElementById('rightGas');
 const c1=document.getElementById('cottonNH3'),c2=document.getElementById('cottonHCl'),result=document.getElementById('result'),meter=document.getElementById('meter'),ringLabel=document.getElementById('ringLabel');
+const leftLabel=document.getElementById('leftLabel'),rightLabel=document.getElementById('rightLabel'),speedText=document.getElementById('speedText'),legend=document.getElementById('legend');
 const steps=[1,2,3,4].map(i=>document.getElementById('s'+i)); const canvas=document.getElementById('fx'),ctx=canvas.getContext('2d');
-let state=0,running=false,particles=[],startTime=0,raf;
+const gases={NH3:{name:'الأمونيا',M:17,color:'#6fe7ff'},HCl:{name:'كلوريد الهيدروجين',M:36.5,color:'#ff9b7a'}};
+let state=0,running=false,paused=false,particles=[],ringX=null,ringY=null,ringStrength=0,raf,lastT=0,spawnL=0,spawnR=0;
 function setStep(n){steps.forEach((s,i)=>s.classList.toggle('active',i===n-1));}
-function resize(){const r=canvas.getBoundingClientRect();const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)} resize();addEventListener('resize',resize);
-nh3Btn.onclick=()=>{if(state!==0)return;state=1;c1.classList.add('loaded');hclBtn.disabled=false;nh3Btn.disabled=true;setStep(2);result.textContent='تم تجهيز طرف الأمونيا. جهّز الطرف الآخر.'};
-hclBtn.onclick=()=>{if(state!==1)return;state=2;c2.classList.add('loaded');hclBtn.disabled=true;startBtn.disabled=false;setStep(3);result.textContent='الطرفان جاهزان. اضغط بدء التجربة.'};
-startBtn.onclick=()=>{if(state!==2||running)return;running=true;state=3;startBtn.disabled=true;startTime=performance.now();particles=[];result.textContent='تنتشر الجزيئات داخل الأنبوبة…';animate()};
+function resize(){const r=canvas.getBoundingClientRect();canvas.width=Math.round(r.width*devicePixelRatio);canvas.height=Math.round(r.height*devicePixelRatio);ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)} resize();addEventListener('resize',resize);
+function updateLabels(){let a=gases.NH3,b=gases.HCl;leftLabel.innerHTML=`NH₃<br>${a.name}`;rightLabel.innerHTML=`HCl<br>${b.name}`;legend.innerHTML=`<span style="color:${a.color}">●</span> ${a.name} &nbsp; <span style="color:${b.color}">●</span> ${b.name}`;speedText.textContent='NH₃ أخف، لذلك ينتشر أسرع ويقطع مسافة أكبر قبل الالتقاء.'} updateLabels();
+leftGas.value='NH3';rightGas.value='HCl';leftGas.disabled=true;rightGas.disabled=true;
+leftBtn.onclick=()=>{if(state!==0)return;state=1;c1.classList.add('loaded');rightBtn.disabled=false;leftBtn.disabled=true;setStep(2);result.textContent='خرج بخار الأمونيا من القطنة اليسرى. جهّز قطنة HCl في الطرف الآخر.'};
+rightBtn.onclick=()=>{if(state!==1)return;state=2;c2.classList.add('loaded');rightBtn.disabled=true;startBtn.disabled=false;setStep(3);result.textContent='الطرفان جاهزان. عند البدء ستخرج الجزيئات من القطن نفسه وتنتشر ببطء.'};
+startBtn.onclick=()=>{if(state!==2||running)return;running=true;paused=false;state=3;startBtn.disabled=true;pauseBtn.disabled=false;pauseBtn.textContent='⏸ إيقاف مؤقت';particles=[];ringX=ringY=null;ringStrength=0;spawnL=spawnR=0;lastT=performance.now();result.textContent='تنتشر جزيئات NH₃ وHCl ببطء من قطعتي القطن…';animate(lastT)};
+pauseBtn.onclick=()=>{if(!running)return;paused=!paused;pauseBtn.textContent=paused?'▶ متابعة':'⏸ إيقاف مؤقت';if(!paused){lastT=performance.now();raf=requestAnimationFrame(animate)}};
 resetBtn.onclick=reset;
-function reset(){cancelAnimationFrame(raf);running=false;state=0;particles=[];c1.classList.remove('loaded');c2.classList.remove('loaded');nh3Btn.disabled=false;hclBtn.disabled=true;startBtn.disabled=true;meter.style.width='0%';ringLabel.classList.remove('show');setStep(1);result.textContent='ابدأ بتجهيز قطعة القطن في الطرف الأيسر.';ctx.clearRect(0,0,canvas.width,canvas.height)}
-function spawn(side,w,h){const fast=side==='left';if(particles.length>220)return;particles.push({side,x:fast?w*.13:w*.87,y:h*.47+(Math.random()-.5)*28,vx:(fast?1:-1)*(fast?1.2:.72),vy:(Math.random()-.5)*.25,r:2+Math.random()*1.6})}
-function animate(t=performance.now()){const w=canvas.clientWidth,h=canvas.clientHeight,elapsed=(t-startTime)/1000;ctx.clearRect(0,0,w,h);const mobile=matchMedia('(max-width:600px)').matches;if(Math.random()<(mobile?.48:.8))spawn('left',w,h);if(Math.random()<(mobile?.40:.65))spawn('right',w,h);const target=w*.68;for(const p of particles){p.x+=p.vx;p.y+=p.vy+(Math.random()-.5)*.1;p.y=Math.max(h*.41,Math.min(h*.55,p.y));ctx.beginPath();ctx.fillStyle=p.side==='left'?'#72c7d0':'#bf9975';ctx.globalAlpha=.75;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;if(elapsed>3.2){ctx.save();ctx.shadowColor='white';ctx.shadowBlur=12;ctx.fillStyle='#fdfdfddd';ctx.fillRect(target-4,h*.405,8,h*.145);ctx.restore();ringLabel.style.left=(target/w*100-7)+'%';ringLabel.classList.add('show')}meter.style.width=Math.min(100,elapsed*18)+'%';if(elapsed>6.2){running=false;state=4;setStep(4);result.innerHTML='<b>النتيجة:</b> تكوّنت حلقة بيضاء من كلوريد الأمونيوم NH₄Cl أقرب إلى طرف HCl.<br><b>السبب:</b> جزيئات NH₃ أخف وتنتشر بسرعة أكبر.';return}raf=requestAnimationFrame(animate)}
+function reset(){cancelAnimationFrame(raf);running=false;paused=false;state=0;particles=[];ringX=ringY=null;ringStrength=0;c1.classList.remove('loaded');c2.classList.remove('loaded');leftBtn.disabled=false;rightBtn.disabled=true;startBtn.disabled=true;pauseBtn.disabled=true;pauseBtn.textContent='⏸ إيقاف مؤقت';meter.style.width='0%';ringLabel.classList.remove('show');setStep(1);result.textContent='ابدأ بتجهيز قطعة القطن المبللة بالأمونيا، ثم الطرف الآخر بحمض الهيدروكلوريك.';clear();updateLabels()}
+function spawn(side,w,h){const key=side==='left'?'NH3':'HCl',g=gases[key];/* slow visual speeds; NH3 remains faster */ const base=side==='left'?31:21; particles.push({side,key,x:side==='left'?w*.135:w*.865,y:h*.46+(Math.random()-.5)*26,vx:(side==='left'?1:-1)*(base*(.88+Math.random()*.24)),vy:(Math.random()-.5)*7,r:2.2+Math.random()*1.6,dead:false})}
+function clear(){ctx.clearRect(0,0,canvas.width,canvas.height)}
+function drawParticle(p){ctx.beginPath();ctx.fillStyle=gases[p.key].color;ctx.globalAlpha=.88;ctx.shadowColor=gases[p.key].color;ctx.shadowBlur=5;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+function findContact(){const L=particles.filter(p=>p.side==='left'&&!p.dead),R=particles.filter(p=>p.side==='right'&&!p.dead);let best=null,bestD=1e9;for(const a of L){for(const b of R){const dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);if(d<bestD){bestD=d;best=[a,b]}}}return bestD<=9?best:null}
+function drawSmokeRing(w,h){if(ringX==null)return;ringStrength=Math.min(1,ringStrength+.012);ctx.save();ctx.globalAlpha=.24+.65*ringStrength;ctx.strokeStyle='#fff';ctx.shadowColor='#fff';ctx.shadowBlur=15;ctx.lineWidth=3+8*ringStrength;for(let i=0;i<7;i++){const jitter=(i-3)*1.6;ctx.beginPath();ctx.ellipse(ringX+jitter,ringY,6+7*ringStrength,30+12*ringStrength,0,0,Math.PI*2);ctx.stroke()}ctx.restore();ringLabel.textContent='حلقة دخان أبيض NH₄Cl';ringLabel.style.left=(ringX/w*100-9)+'%';ringLabel.classList.add('show')}
+function animate(t){if(!running||paused)return;const w=canvas.clientWidth,h=canvas.clientHeight,dt=Math.min(.035,(t-lastT)/1000||.016);lastT=t;clear();spawnL+=dt;spawnR+=dt;if(spawnL>.13){spawn('left',w,h);spawnL=0}if(spawnR>.16){spawn('right',w,h);spawnR=0}
+ for(const p of particles){if(ringX!=null){/* particles arriving at product ring are consumed */if((p.side==='left'&&p.x>=ringX-5)||(p.side==='right'&&p.x<=ringX+5)){p.dead=true;ringStrength=Math.min(1,ringStrength+.015);continue}}p.x+=p.vx*dt;p.y+=p.vy*dt+(Math.random()-.5)*.35;p.y=Math.max(h*.40,Math.min(h*.53,p.y));if(p.x<w*.125||p.x>w*.875)p.dead=true;drawParticle(p)}particles=particles.filter(p=>!p.dead);ctx.globalAlpha=1;
+ if(ringX==null){const hit=findContact();if(hit){const[a,b]=hit;ringX=(a.x+b.x)/2;ringY=(a.y+b.y)/2;a.dead=b.dead=true;setStep(4);result.innerHTML='<b>لحظة الالتقاء:</b> تلامست جزيئات NH₃ وHCl الآن، فتبدأ حلقة كلوريد الأمونيوم البيضاء بالتكوّن في نفس المكان.<br><b>NH₃(g) + HCl(g) → NH₄Cl(s)</b>';}}
+ drawSmokeRing(w,h);const leftFront=Math.max(w*.135,...particles.filter(p=>p.side==='left').map(p=>p.x));const rightFront=Math.min(w*.865,...particles.filter(p=>p.side==='right').map(p=>p.x));const progress=Math.max(0,Math.min(100,(leftFront-w*.135 + w*.865-rightFront)/(w*.73)*50));meter.style.width=progress+'%';raf=requestAnimationFrame(animate)}
 </script>
 </body>
 </html>
